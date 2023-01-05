@@ -1,0 +1,23 @@
+#!/bin/bash
+
+
+# chrome="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+# "$chrome" --headless --disable-gpu --dump-dom $1 \
+#     | htmlq a -a href \
+#     | anew 
+
+# # curl -sg http://127.0.0.1:9222/json/new | grep webSocketDebuggerUrl | cut -d'"' -f4 | head -1
+
+# {"id":1,"method":"Runtime.evaluate","params":{"expression": "'the current URL is: ' + location.href"}}
+# {"id":1,"method":"Runtime.evaluate","params":{"expression": "'the current URL is: ' + document.getElementsByClassName('bc-pagination__link')[4].click()"}}
+# {"id":1,"method":"Runtime.evaluate","params":{"expression": "'the current URL is: ' + document.getElementsByClassName('bc-pagination__link')[0].click()"}}
+# {"id":1,"method":"Runtime.evaluate","params":{"expression": "'the current URL is: ' + document.getElementsByClassName('cc-inline-clamp-2')[0].firstChild.data"}}
+# '{ "id":2, "method":"Page.navigate", "params":{"url": "https://bugcrowd.com/programs"} }'
+# # document.getElementsByClassName("cc-inline-clamp-2")[0].firstChild.data
+
+url=$(curl -sg http://127.0.0.1:9222/json/new | grep webSocketDebuggerUrl | cut -d'"' -f4 | head -1)
+echo $url
+# echo '{ "id":2, "method":"Page.navigate", "params":{"url": "https://google.com"}}' | websocat -t - $url
+# websocat $url -t "{ 'id':2, 'method':'Page.navigate', 'params':{'url': 'https://google.com'}}" > file
+websocat $url -t '{ "id":2, "method":"Page.navigate", "params":{"url": "https://google.com"}}' > file
+# echo '{"id":1,"method":"Runtime.evaluate","params":{"expression": "'the current URL is: ' + location.href"}}' | websocat -t - $url
